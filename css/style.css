@@ -664,7 +664,8 @@ button {
     font-family: var(--font-heading);
     font-size: 2.5rem;
     font-weight: 800;
-    color: rgba(0, 240, 255, 0.15);
+    color: rgba(0, 240, 255, 0.65); /* Made brighter by default for mobile readability */
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
     margin-bottom: 16px;
     line-height: 1;
     transition: var(--transition-smooth);
