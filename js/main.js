@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const nameInput = form.querySelector('input[placeholder*="Иван"]');
+            const nameInput = form.querySelector('input[placeholder*="Асан"]');
             const phoneInput = form.querySelector('input[type="tel"]');
             const msgInput = form.querySelector('textarea') || form.querySelector('input[placeholder*="Покупка"]');
 
