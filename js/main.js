@@ -247,12 +247,26 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const nameInput = form.querySelector('input[placeholder*="Иван"]');
+            const phoneInput = form.querySelector('input[type="tel"]');
+            const msgInput = form.querySelector('textarea') || form.querySelector('input[placeholder*="Покупка"]');
+
+            const name = nameInput ? nameInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            const msg = msgInput ? msgInput.value.trim() : '';
+
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
 
             // Interactive loading simulation
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loader">Отправка...</span>';
+
+            // Redirect to WhatsApp with prefilled message
+            const whatsappNumber = "996552181122";
+            const messageText = `Здравствуйте! Меня зовут ${name}. Мой телефон: ${phone}.${msg ? ' Интересует: ' + msg : ' Хочу получить консультацию.'}`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(messageText)}`;
+            window.open(whatsappUrl, '_blank');
 
             setTimeout(() => {
                 submitBtn.innerHTML = 'Успешно отправлено!';
@@ -271,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Close modal if open
                     if (contactModal) contactModal.classList.remove('active');
                 }, 3000);
-            }, 1500);
+            }, 1000);
         });
     });
 });
