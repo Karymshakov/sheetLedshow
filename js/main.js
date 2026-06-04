@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewGrid = document.querySelector('.preview-grid');
 
     const tabStyles = {
-        'sale': { text: 'УСТАНОВКА', sub: 'Внутренние и наружные экраны', color: '#00f0ff', coarse: false },
+        'sale': { text: 'УСТАНОВКА', sub: 'Медиафасады, LED экраны и панели', color: '#00f0ff', coarse: false },
         'rent': { text: 'АРЕНДА', sub: 'Сцены, подиумы, звук и свет', color: '#3b82f6', coarse: true },
         'lines': { text: 'БЕГУЩИЕ СТРОКИ', sub: 'Бегущие строки и табло', color: '#8b5cf6', coarse: false },
-        'light': { text: 'ЛАЗЕРЫ', sub: 'Световое и звуковое оборудование', color: '#10b981', coarse: true }
+        'light': { text: 'ОБОРУДОВАНИЕ', sub: 'Сцены, DMX свет, конференц-системы', color: '#10b981', coarse: true }
     };
 
     tabBtns.forEach(btn => {
