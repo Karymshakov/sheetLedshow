@@ -1253,9 +1253,8 @@ button {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
+    position: relative;
     color: var(--text-secondary);
     transition: var(--transition-smooth);
     animation: floatIcon 3s ease-in-out infinite;
@@ -1272,6 +1271,16 @@ button {
     box-shadow: 0 0 15px var(--primary-glow);
     transform: translateY(-10px) scale(1.05);
     animation-play-state: paused;
+}
+
+.social-link svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 18px;
+    display: block;
 }
 
 /* Styled Interactive Dark Map */
