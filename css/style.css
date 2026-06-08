@@ -510,6 +510,34 @@ button {
     align-items: flex-start;
 }
 
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(0, 240, 255, 0.06);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 24px;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.hero-badge svg {
+    flex-shrink: 0;
+    color: var(--primary);
+    animation: pulseGeo 2s infinite;
+}
+
+@keyframes pulseGeo {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.7; }
+}
+
 .hero-title-main {
     font-family: var(--font-heading);
     font-size: 3.6rem;
@@ -1216,7 +1244,7 @@ button {
     flex-shrink: 0;
 }
 
-.contact-details h4 {
+.contact-details h3 {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 4px;
@@ -1323,7 +1351,7 @@ button {
     max-width: 240px;
 }
 
-.map-overlay-card h5 {
+.map-overlay-card h4 {
     font-family: var(--font-heading);
     font-size: 0.95rem;
     font-weight: 700;

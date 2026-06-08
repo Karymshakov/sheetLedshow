@@ -288,4 +288,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         });
     });
+
+    // --- 8. LAZY LOAD MAP IFRAME ---
+    const mapWrap = document.getElementById('map-wrap');
+    const mapPlaceholder = document.getElementById('map-placeholder');
+    if (mapWrap && mapPlaceholder) {
+        const mapObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'map-iframe';
+                    iframe.src = 'https://www.openstreetmap.org/export/embed.html?bbox=74.644%2C42.887%2C74.659%2C42.894&layer=mapnik&marker=42.8906%2C74.6517';
+                    iframe.setAttribute('allowfullscreen', '');
+                    iframe.setAttribute('loading', 'lazy');
+                    iframe.setAttribute('title', 'Шоурум LED Show на карте Бишкека');
+                    
+                    // Replace placeholder with iframe
+                    mapPlaceholder.replaceWith(iframe);
+                    mapObserver.unobserve(mapWrap);
+                }
+            });
+        }, {
+            rootMargin: '200px 0px' // Load 200px before entering viewport
+        });
+        mapObserver.observe(mapWrap);
+    }
 });
