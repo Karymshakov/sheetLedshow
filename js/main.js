@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. SCROLL REVEAL ANIMATIONS (Intersection Observer) ---
     const reveals = document.querySelectorAll('.reveal');
+    // Use a lower threshold on mobile to ensure tall sections (e.g., works portfolio)
+    // correctly appear even when only a small portion is visible
+    const isMobile = window.innerWidth <= 768;
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -39,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
+        threshold: isMobile ? 0.02 : 0.1,
+        rootMargin: isMobile ? "0px 0px 0px 0px" : "0px 0px -30px 0px"
     });
 
     reveals.forEach(element => {

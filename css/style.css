@@ -1621,13 +1621,14 @@ textarea.form-input {
         grid-template-columns: 1fr;
     }
     
+    /* --- PORTFOLIO / WORKS MOBILE FIX --- */
     .works-list {
-        gap: 60px;
+        gap: 48px;
     }
     
     .work-item, .work-item:nth-child(even) {
         grid-template-columns: 1fr;
-        gap: 24px;
+        gap: 20px;
     }
     
     .work-item:nth-child(even) .work-img-wrap {
@@ -1636,6 +1637,25 @@ textarea.form-input {
     
     .work-item:nth-child(even) .work-info {
         order: 2;
+    }
+
+    /* Ensure image/video containers have a reasonable height on mobile */
+    .work-img-wrap {
+        aspect-ratio: 16/9;
+        max-height: 260px;
+    }
+
+    /* Scale down heading sizes for mobile readability */
+    .work-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .work-num {
+        font-size: 1.8rem;
+    }
+
+    .work-subtitle {
+        font-size: 0.85rem;
     }
     
     .form-row {
