@@ -244,11 +244,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper function to safely send gtag events (hoisted/available throughout DOMContentLoaded)
+    function trackEvent(eventName, params = {}) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+            console.log(`[Google Ads Tag] Event tracked: ${eventName}`, params);
+        } else {
+            console.log(`[Google Ads Tag] Event simulated (gtag not loaded yet): ${eventName}`, params);
+        }
+    }
+
     // --- 7. FORM SUBMISSION ---
     const forms = document.querySelectorAll('.contact-form');
     forms.forEach(form => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            // Track form submission conversion
+            trackEvent('generate_lead', {
+                'event_category': 'form',
+                'event_label': form.getAttribute('id') || 'contact-form'
+            });
 
             const nameInput = form.querySelector('input[placeholder*="Асан"]');
             const phoneInput = form.querySelector('input[type="tel"]');
@@ -316,4 +332,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         mapObserver.observe(mapWrap);
     }
+
+    // --- 9. GOOGLE ADS / ANALYTICS CONVERSION TRACKING ---
+    // Track WhatsApp link clicks
+    document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackEvent('click_whatsapp', {
+                'event_category': 'contact',
+                'event_label': link.getAttribute('id') || 'whatsapp-link'
+            });
+        });
+    });
+
+    // Track Telegram link clicks
+    document.querySelectorAll('a[href*="t.me"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackEvent('click_telegram', {
+                'event_category': 'contact',
+                'event_label': link.getAttribute('id') || 'telegram-link'
+            });
+        });
+    });
+
+    // Track Phone link clicks
+    document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackEvent('click_phone', {
+                'event_category': 'contact',
+                'event_label': link.getAttribute('id') || link.getAttribute('href')
+            });
+        });
+    });
 });
