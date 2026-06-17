@@ -244,10 +244,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- GOOGLE ADS CONVERSION LABELS MAPPING ---
+    const GOOGLE_ADS_CONVERSIONS = {
+        'generate_lead': '',                              // Форма обратной связи (ярлык не задан)
+        'click_whatsapp': '',                             // Клик на WhatsApp (ярлык не задан)
+        'click_telegram': '',                             // Клик на Telegram (ярлык не задан)
+        'click_phone': 'AW-18213825167/tG1VCJnM68AcEI_Vg-1D'  // ✅ Клик по номеру телефона
+    };
+
+    // Специальная функция для конверсий по телефону с callback (рекомендация Google)
+    function gtag_report_conversion(url) {
+        var callback = function () {
+            if (typeof(url) !== 'undefined') {
+                window.location = url;
+            }
+        };
+        gtag('event', 'conversion', {
+            'send_to': GOOGLE_ADS_CONVERSIONS['click_phone'],
+            'value': 1.0,
+            'currency': 'USD',
+            'event_callback': callback
+        });
+        return false;
+    }
+
     // Helper function to safely send gtag events (hoisted/available throughout DOMContentLoaded)
     function trackEvent(eventName, params = {}) {
         if (typeof gtag === 'function') {
             gtag('event', eventName, params);
+            
+            // Отправка прямой конверсии в Google Ads, если настроен ярлык
+            const conversionId = GOOGLE_ADS_CONVERSIONS[eventName];
+            if (conversionId && conversionId.trim() !== '') {
+                gtag('event', 'conversion', {
+                    'send_to': conversionId
+                });
+                console.log(`[Google Ads Tag] Direct conversion sent to Google Ads: ${conversionId}`);
+            }
+
             console.log(`[Google Ads Tag] Event tracked: ${eventName}`, params);
         } else {
             console.log(`[Google Ads Tag] Event simulated (gtag not loaded yet): ${eventName}`, params);
@@ -354,13 +388,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Track Phone link clicks
+    // Track Phone link clicks (с Google Ads callback для надёжной отправки конверсии)
     document.querySelectorAll('a[href^="tel:"]').forEach(link => {
-        link.addEventListener('click', () => {
-            trackEvent('click_phone', {
-                'event_category': 'contact',
-                'event_label': link.getAttribute('id') || link.getAttribute('href')
-            });
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const phoneHref = link.getAttribute('href');
+            console.log(`[Google Ads Tag] Phone click conversion fired: ${phoneHref}`);
+            gtag_report_conversion(phoneHref);
         });
     });
 });
