@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- GOOGLE ADS CONVERSION LABELS MAPPING ---
     const GOOGLE_ADS_CONVERSIONS = {
-        'generate_lead': '',                              // Форма обратной связи (ярлык не задан)
+        'generate_lead': 'AW-18213825167/5keyCKOgh8EcEI_Vg-1D',  // ✅ Отправка формы / Покупка
         'click_whatsapp': '',                             // Клик на WhatsApp (ярлык не задан)
         'click_telegram': '',                             // Клик на Telegram (ярлык не задан)
         'click_phone': 'AW-18213825167/tG1VCJnM68AcEI_Vg-1D'  // ✅ Клик по номеру телефона
