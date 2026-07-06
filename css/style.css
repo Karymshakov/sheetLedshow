@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
 /* --- DESIGN SYSTEM TOKENS --- */
 :root {
@@ -14,7 +14,13 @@
     --secondary-glow: rgba(59, 130, 246, 0.35);
     --accent: #8b5cf6;
     --accent-glow: rgba(139, 92, 246, 0.35);
-    
+
+    /* Brand RGB sub-pixel colors, taken directly from the LED Show logo mark */
+    --brand-green: #23ea00;
+    --brand-green-glow: rgba(35, 234, 0, 0.35);
+    --brand-red: #ff3131;
+    --brand-red-glow: rgba(255, 49, 49, 0.35);
+
     --text-primary: #f3f4f6;
     --text-secondary: #9ca3af;
     --text-muted: #6b7280;
@@ -35,6 +41,7 @@
     /* Fonts */
     --font-heading: 'Outfit', 'Inter', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Consolas', monospace;
     
     /* Transitions */
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -174,6 +181,23 @@ button {
     outline: none;
 }
 
+/* Visible focus ring for keyboard navigation (buttons below reset outline: none) */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
@@ -206,25 +230,40 @@ button {
     color: var(--primary);
 }
 
+/* Signature element: an RGB sub-pixel triplet, echoing the three LED colors
+   in the logo mark. Appears at every section seam instead of a generic glow. */
 .section-divider {
     height: 1px;
     width: 100%;
     background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.12) 50%, transparent);
     position: relative;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
 }
 
-.section-divider::after {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px;
-    height: 3px;
+.rgb-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.rgb-dot-cyan {
     background: var(--primary);
-    box-shadow: 0 0 12px var(--primary);
-    border-radius: 5px;
+    color: var(--primary);
+}
+
+.rgb-dot-green {
+    background: var(--brand-green);
+    color: var(--brand-green);
+}
+
+.rgb-dot-red {
+    background: var(--brand-red);
+    color: var(--brand-red);
 }
 
 .glow-btn {
@@ -267,6 +306,10 @@ button {
     opacity: 1;
 }
 
+.glow-btn:active {
+    transform: translateY(0) scale(0.97);
+}
+
 .sec-btn {
     padding: 14px 28px;
     background: transparent;
@@ -285,6 +328,10 @@ button {
     background: rgba(0, 240, 255, 0.05);
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.15) inset;
     transform: translateY(-2px);
+}
+
+.sec-btn:active {
+    transform: translateY(0) scale(0.97);
 }
 
 .glass-card {
@@ -323,9 +370,58 @@ button {
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 2.6vw + 1rem, 2.5rem);
     font-weight: 800;
     margin-bottom: 16px;
+}
+
+/* Live open/closed badge, computed client-side from real business hours
+   (see the LocalBusiness openingHoursSpecification in the page's JSON-LD) */
+.hours-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.hours-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.hours-badge.is-open {
+    color: var(--brand-green);
+    border-color: rgba(35, 234, 0, 0.35);
+    background: rgba(35, 234, 0, 0.06);
+}
+
+.hours-badge.is-open .hours-dot {
+    background: var(--brand-green);
+    box-shadow: 0 0 8px var(--brand-green);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.hours-badge.is-closed {
+    color: var(--brand-red);
+    border-color: rgba(255, 49, 49, 0.35);
+    background: rgba(255, 49, 49, 0.06);
+}
+
+.hours-badge.is-closed .hours-dot {
+    background: var(--brand-red);
+    box-shadow: 0 0 8px var(--brand-red);
 }
 
 /* Animations Trigger Classes */
@@ -444,14 +540,17 @@ button {
 .menu-btn {
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     z-index: 101;
 }
 
 .menu-btn span {
-    width: 100%;
+    width: 24px;
     height: 2px;
     background: #ffffff;
     border-radius: 2px;
@@ -540,7 +639,7 @@ button {
 
 .hero-title-main {
     font-family: var(--font-heading);
-    font-size: 3.6rem;
+    font-size: clamp(2.25rem, 4.2vw + 1.2rem, 3.6rem);
     font-weight: 900;
     line-height: 1.15;
     display: flex;
@@ -579,6 +678,23 @@ button {
     align-items: center;
     justify-content: center;
     border: none;
+    overflow: hidden;
+}
+
+.glow-btn-solid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.glow-btn-solid:hover::after {
+    left: 125%;
 }
 
 .glow-btn-solid:hover {
@@ -586,6 +702,10 @@ button {
     color: #010924;
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
+}
+
+.glow-btn-solid:active {
+    transform: translateY(0) scale(0.97);
 }
 
 .hero-image-wrap {
@@ -625,6 +745,11 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.offer-card:hover,
+.adv-card:hover {
+    transform: translateY(-6px);
 }
 
 .offer-icon-box {
@@ -689,9 +814,9 @@ button {
 }
 
 .adv-num {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 2.3rem;
+    font-weight: 700;
     color: rgba(0, 240, 255, 0.65); /* Made brighter by default for mobile readability */
     text-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
     margin-bottom: 16px;
@@ -702,6 +827,36 @@ button {
 .adv-card:hover .adv-num {
     color: var(--primary);
     text-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Cycle the RGB sub-pixel colors across the numbered cards, so the
+   numbering itself echoes the LED palette instead of a single flat tint */
+.adv-card:nth-child(3n+2) .adv-num {
+    color: rgba(35, 234, 0, 0.65);
+    text-shadow: 0 0 8px rgba(35, 234, 0, 0.2);
+}
+
+.adv-card:nth-child(3n+2):hover .adv-num {
+    color: var(--brand-green);
+    text-shadow: 0 0 10px var(--brand-green-glow);
+}
+
+.adv-card:nth-child(3n+2):hover::before {
+    background: var(--brand-green);
+}
+
+.adv-card:nth-child(3n+3) .adv-num {
+    color: rgba(255, 49, 49, 0.65);
+    text-shadow: 0 0 8px rgba(255, 49, 49, 0.2);
+}
+
+.adv-card:nth-child(3n+3):hover .adv-num {
+    color: var(--brand-red);
+    text-shadow: 0 0 10px var(--brand-red-glow);
+}
+
+.adv-card:nth-child(3n+3):hover::before {
+    background: var(--brand-red);
 }
 
 .adv-card h3 {
@@ -739,6 +894,10 @@ button {
     border-color: var(--primary);
     background: rgba(0, 240, 255, 0.05);
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+.tab-btn:active {
+    transform: scale(0.96);
 }
 
 .assortment-content {
@@ -795,6 +954,20 @@ button {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    padding: 6px 10px;
+    margin: 0 -10px;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-fast);
+}
+
+/* Items with a live preview swap get a subtle affordance so it reads as
+   interactive, not just decorative */
+.assortment-item[data-preview-title] {
+    cursor: pointer;
+}
+
+.assortment-item[data-preview-title]:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .assortment-item svg {
@@ -806,6 +979,52 @@ button {
 .assortment-item span {
     font-size: 0.95rem;
     color: var(--text-primary);
+}
+
+/* Live LED running-text (marquee) demo, inside the "lines" tab */
+.marquee-demo {
+    margin-bottom: 24px;
+    padding: 16px;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: var(--border-radius-sm);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.marquee-demo-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.marquee-input {
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.marquee-color-row {
+    display: flex;
+    gap: 10px;
+}
+
+.marquee-color-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: var(--swatch);
+    box-shadow: 0 0 8px var(--swatch);
+    transition: var(--transition-fast);
+}
+
+.marquee-color-btn:hover {
+    transform: scale(1.15);
+}
+
+.marquee-color-btn.active {
+    border-color: #ffffff;
+    box-shadow: 0 0 14px var(--swatch);
 }
 
 /* Interactive Preview Box in Assortment */
@@ -894,6 +1113,272 @@ button {
     letter-spacing: 1px;
 }
 
+.preview-content-label,
+.preview-glow-core {
+    transition: opacity 0.3s ease;
+}
+
+/* Live running-text sign simulator: typed text scrolls through a simulated
+   LED dot-matrix (real pixel gaps via the ::after overlay), so a visitor can
+   preview their own message the way it would look on an actual sign */
+.led-marquee-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #010202;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.preview-screen-box.marquee-mode .led-marquee-wrap {
+    opacity: 1;
+}
+
+.preview-screen-box.marquee-mode .preview-content-label,
+.preview-screen-box.marquee-mode .preview-glow-core,
+.preview-screen-box.modular-mode .preview-content-label,
+.preview-screen-box.modular-mode .preview-glow-core,
+.preview-screen-box.dmx-mode .preview-content-label,
+.preview-screen-box.dmx-mode .preview-glow-core,
+.preview-screen-box.draw-mode .preview-content-label,
+.preview-screen-box.draw-mode .preview-glow-core {
+    opacity: 0;
+}
+
+/* "Интерактивные панели" preview: an actually drawable touch panel */
+.draw-preview {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: #010202;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.preview-screen-box.draw-mode .draw-preview {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#draw-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.draw-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.03em;
+    text-align: center;
+    padding: 0 24px;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.draw-hint.is-hidden {
+    opacity: 0;
+}
+
+/* "Аренда экранов" preview: a grid of modular cabinets powering on in
+   sequence, echoing the fast, tile-by-tile assembly of a rental screen */
+.modular-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4px;
+    padding: 18px;
+    background: #010202;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.preview-screen-box.modular-mode .modular-grid {
+    opacity: 1;
+}
+
+.modular-tile {
+    border-radius: 3px;
+    background: radial-gradient(circle at 50% 40%, rgba(35, 234, 0, 0.4) 0%, rgba(35, 234, 0, 0.04) 75%);
+    border: 1px solid rgba(35, 234, 0, 0.3);
+    opacity: 0.25;
+    transform: scale(0.88);
+    animation: tilePowerOn 3.2s ease-in-out infinite;
+}
+
+.modular-tile:nth-child(1) { animation-delay: 0s; }
+.modular-tile:nth-child(2) { animation-delay: 0.12s; }
+.modular-tile:nth-child(3) { animation-delay: 0.24s; }
+.modular-tile:nth-child(4) { animation-delay: 0.36s; }
+.modular-tile:nth-child(5) { animation-delay: 0.48s; }
+.modular-tile:nth-child(6) { animation-delay: 0.6s; }
+.modular-tile:nth-child(7) { animation-delay: 0.72s; }
+.modular-tile:nth-child(8) { animation-delay: 0.84s; }
+.modular-tile:nth-child(9) { animation-delay: 0.96s; }
+.modular-tile:nth-child(10) { animation-delay: 1.08s; }
+.modular-tile:nth-child(11) { animation-delay: 1.2s; }
+.modular-tile:nth-child(12) { animation-delay: 1.32s; }
+
+@keyframes tilePowerOn {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.88);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modular-caption {
+    position: absolute;
+    left: 18px;
+    bottom: 10px;
+    grid-column: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--brand-green);
+    text-shadow: 0 0 8px var(--brand-green-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modular-tile {
+        animation: none;
+        opacity: 0.9;
+        transform: scale(1);
+    }
+}
+
+/* "Сценическое оборудование" preview: a live DMX color mixer - pick a
+   color and the beam updates, echoing controllable architectural lighting */
+.dmx-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 22px;
+    background: #010202;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.preview-screen-box.dmx-mode .dmx-panel {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dmx-beam {
+    width: 65%;
+    height: 75%;
+    background: radial-gradient(ellipse at 50% 0%, var(--dmx-color, #8b5cf6) 0%, transparent 68%);
+    filter: blur(2px);
+    animation: dmxFlicker 2.6s ease-in-out infinite;
+}
+
+@keyframes dmxFlicker {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.dmx-swatches {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.dmx-swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--c);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px var(--c);
+    transition: var(--transition-fast);
+}
+
+.dmx-swatch:hover {
+    transform: scale(1.15);
+}
+
+.dmx-swatch.active {
+    border-color: #ffffff;
+    box-shadow: 0 0 14px var(--c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dmx-beam {
+        animation: none;
+        opacity: 0.9;
+    }
+}
+
+.led-marquee-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.92) 1px, transparent 1.4px);
+    background-size: 4px 4px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.led-marquee-track {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 100%;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--marquee-color, #ff3131);
+    text-shadow: 0 0 6px var(--marquee-color, #ff3131), 0 0 18px var(--marquee-color, #ff3131);
+    animation: marqueeScroll 14s linear infinite;
+}
+
+@keyframes marqueeScroll {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .led-marquee-track {
+        animation: none;
+        padding-left: 0;
+    }
+}
+
 /* --- INTERACTIVE LED CALCULATOR / SIMULATOR --- */
 .calc-section {
     border-top: 1px solid rgba(255, 255, 255, 0.03);
@@ -926,7 +1411,7 @@ button {
 
 .calc-select-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
 }
 
@@ -986,7 +1471,7 @@ button {
 
 .calc-slider-val {
     float: right;
-    font-family: var(--font-heading);
+    font-family: var(--font-mono);
     color: var(--primary);
     font-weight: 700;
 }
@@ -997,10 +1482,13 @@ button {
     justify-content: space-between;
 }
 
+/* Deliberately a plain LED "readout" rather than a photo preview — the
+   Assortment section already has a photo-backed simulator, so this one stays
+   abstract (pixel grid + glow) to avoid the two looking like the same widget */
 .calc-screen-viewer {
     width: 100%;
     aspect-ratio: 16/9;
-    background: #000;
+    background: radial-gradient(circle at 50% 55%, rgba(0, 240, 255, 0.16) 0%, #000 72%);
     border: 4px solid #1e293b;
     border-radius: var(--border-radius-sm);
     position: relative;
@@ -1017,20 +1505,10 @@ button {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
         radial-gradient(rgba(0, 240, 255, 0.3) 1px, transparent 1.2px);
     background-size: 10px 10px;
     z-index: 1;
-}
-
-.calc-simulated-image {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.45;
-    z-index: 0;
-    background: url('../images/showroom.webp') center/cover no-repeat;
 }
 
 .calc-simulated-text {
@@ -1047,7 +1525,7 @@ button {
 .calc-results {
     margin-top: 24px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
 }
 
@@ -1067,9 +1545,9 @@ button {
 }
 
 .calc-stat-val {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--primary);
 }
 
@@ -1151,9 +1629,9 @@ button {
 }
 
 .work-num {
-    font-family: var(--font-heading);
-    font-size: 2.2rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
     color: rgba(0, 240, 255, 0.65); /* Made brighter by default for mobile readability */
     text-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
     line-height: 1;
@@ -1164,6 +1642,37 @@ button {
 .work-item:hover .work-num {
     color: var(--primary);
     text-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Cycle the same RGB sub-pixel colors across the portfolio items */
+.work-item:nth-child(3n+2) .work-num {
+    color: rgba(35, 234, 0, 0.65);
+    text-shadow: 0 0 8px rgba(35, 234, 0, 0.2);
+}
+
+.work-item:nth-child(3n+2):hover .work-num {
+    color: var(--brand-green);
+    text-shadow: 0 0 10px var(--brand-green-glow);
+}
+
+.work-item:nth-child(3n+2):hover .work-img-wrap::before {
+    border-color: var(--brand-green);
+    box-shadow: 0 0 15px rgba(35, 234, 0, 0.1) inset;
+}
+
+.work-item:nth-child(3n+3) .work-num {
+    color: rgba(255, 49, 49, 0.65);
+    text-shadow: 0 0 8px rgba(255, 49, 49, 0.2);
+}
+
+.work-item:nth-child(3n+3):hover .work-num {
+    color: var(--brand-red);
+    text-shadow: 0 0 10px var(--brand-red-glow);
+}
+
+.work-item:nth-child(3n+3):hover .work-img-wrap::before {
+    border-color: var(--brand-red);
+    box-shadow: 0 0 15px rgba(255, 49, 49, 0.1) inset;
 }
 
 .work-info h3 {
@@ -1498,15 +2007,24 @@ textarea.form-input {
 
 .modal-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     color: var(--text-secondary);
     font-size: 1.5rem;
+    line-height: 1;
+    transition: var(--transition-fast);
     z-index: 10;
 }
 
 .modal-close:hover {
     color: var(--primary);
+    background: rgba(0, 240, 255, 0.08);
 }
 
 /* --- RESPONSIVENESS --- */
@@ -1596,21 +2114,17 @@ textarea.form-input {
         --header-height: 70px;
     }
     
-    .hero-title-main {
-        font-size: 2.5rem;
-    }
-    
     /* Hamburger morph to X */
     .menu-btn.active span:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(7px) rotate(45deg);
     }
-    
+
     .menu-btn.active span:nth-child(2) {
         opacity: 0;
     }
-    
+
     .menu-btn.active span:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-7px) rotate(-45deg);
     }
     
     .offer-grid {
@@ -1661,7 +2175,12 @@ textarea.form-input {
     .form-row {
         grid-template-columns: 1fr;
     }
-    
+
+    /* Stack the calculator's stat tiles so long labels never get clipped */
+    .calc-results {
+        grid-template-columns: 1fr;
+    }
+
     .footer-top {
         flex-direction: column;
         gap: 24px;

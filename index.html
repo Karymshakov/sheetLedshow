@@ -182,7 +182,7 @@
                 </div>
             </div>
             <div class="hero-image-wrap reveal">
-                <img src="images/cabinet.webp" alt="Светодиодные LED экраны кабинеты" class="hero-cabinet-img" width="591" height="439">
+                <img src="images/cabinet.webp" alt="Светодиодные LED экраны кабинеты" class="hero-cabinet-img" width="591" height="439" fetchpriority="high">
             </div>
         </div>
     </section>
@@ -190,7 +190,11 @@
     <!-- MAIN CONTENT -->
     <main>
 
-        <div class="section-divider"></div>
+        <div class="section-divider" aria-hidden="true">
+            <span class="rgb-dot rgb-dot-cyan"></span>
+            <span class="rgb-dot rgb-dot-green"></span>
+            <span class="rgb-dot rgb-dot-red"></span>
+        </div>
 
         <!-- WE OFFER (ПРЕДЛОЖЕНИЯ) -->
         <section class="section-padding" id="about"
@@ -266,7 +270,11 @@
             </div>
         </section>
 
-        <div class="section-divider"></div>
+        <div class="section-divider" aria-hidden="true">
+            <span class="rgb-dot rgb-dot-cyan"></span>
+            <span class="rgb-dot rgb-dot-green"></span>
+            <span class="rgb-dot rgb-dot-red"></span>
+        </div>
 
         <!-- OUR ADVANTAGES (НАШИ ПРЕИМУЩЕСТВА) -->
         <section class="section-padding">
@@ -326,7 +334,11 @@
             </div>
         </section>
 
-        <div class="section-divider"></div>
+        <div class="section-divider" aria-hidden="true">
+            <span class="rgb-dot rgb-dot-cyan"></span>
+            <span class="rgb-dot rgb-dot-green"></span>
+            <span class="rgb-dot rgb-dot-red"></span>
+        </div>
 
         <!-- ASSORTMENT (АССОРТИМЕНТ) -->
         <section class="section-padding" id="assortment"
@@ -342,6 +354,7 @@
                     <button class="tab-btn" data-tab="rent" id="tab-btn-rent">Аренда экранов</button>
                     <button class="tab-btn" data-tab="lines" id="tab-btn-lines">Информационные табло</button>
                     <button class="tab-btn" data-tab="light" id="tab-btn-light">Сценическое оборудование</button>
+                    <button class="tab-btn" data-tab="panels" id="tab-btn-panels">Интерактивные панели</button>
                 </div>
 
                 <div class="assortment-content reveal">
@@ -360,15 +373,6 @@
                                     <span><strong>Медиафасады:</strong> Проектирование, производство и монтаж прозрачных
                                         светодиодных медиафасадов высокой яркости для остекления ТЦ и коммерческих
                                         зданий.</span>
-                                </div>
-                                <div class="assortment-item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
-                                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
-                                    <span><strong>Интерактивные Панели:</strong> Умные сенсорные LED и LCD панели для
-                                        интерактивного обучения в школах, ВУЗах, а также для презентаций в
-                                        офисах.</span>
                                 </div>
                                 <div class="assortment-item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
@@ -447,6 +451,21 @@
                                         пунктов.</span>
                                 </div>
                             </div>
+
+                            <!-- Live LED marquee demo: typed text renders in the simulator on the right -->
+                            <div class="marquee-demo">
+                                <label for="marquee-input" class="marquee-demo-label">Попробуйте сами — впишите свой текст</label>
+                                <input type="text" id="marquee-input" class="form-input marquee-input" maxlength="40"
+                                    placeholder="ВАШ ТЕКСТ ДЛЯ ВЫВЕСКИ" autocomplete="off">
+                                <div class="marquee-color-row" role="group" aria-label="Цвет вывески">
+                                    <button type="button" class="marquee-color-btn active" data-color="#ff3131" style="--swatch:#ff3131" aria-label="Красный"></button>
+                                    <button type="button" class="marquee-color-btn" data-color="#f59e0b" style="--swatch:#f59e0b" aria-label="Янтарный"></button>
+                                    <button type="button" class="marquee-color-btn" data-color="#23ea00" style="--swatch:#23ea00" aria-label="Зелёный"></button>
+                                    <button type="button" class="marquee-color-btn" data-color="#00f0ff" style="--swatch:#00f0ff" aria-label="Голубой"></button>
+                                    <button type="button" class="marquee-color-btn" data-color="#ffffff" style="--swatch:#ffffff" aria-label="Белый"></button>
+                                </div>
+                            </div>
+
                             <button class="glow-btn open-modal-btn" id="btn-order-lines">Заказать вывеску</button>
                         </div>
 
@@ -484,16 +503,80 @@
                             <button class="glow-btn open-modal-btn" id="btn-order-light">Арендовать
                                 оборудование</button>
                         </div>
+
+                        <!-- Tab 5: Interactive Panels -->
+                        <div class="assortment-info" id="panels">
+                            <h3 class="assortment-title">Интерактивные LED и LCD панели</h3>
+                            <p class="assortment-desc">Умные сенсорные экраны для обучения и презентаций — управляйте
+                                контентом касанием, как на смартфоне.</p>
+                            <div class="assortment-list">
+                                <div class="assortment-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+                                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    <span><strong>Интерактивное обучение:</strong> Сенсорные LED и LCD панели для школ и
+                                        ВУЗов — писать, рисовать и взаимодействовать с материалом прямо на экране.</span>
+                                </div>
+                                <div class="assortment-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+                                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    <span><strong>Презентации в офисах:</strong> Мультитач-управление контентом для
+                                        совещаний и переговорных комнат.</span>
+                                </div>
+                            </div>
+                            <button class="glow-btn open-modal-btn" id="btn-order-panels">Заказать панель</button>
+                        </div>
                     </div>
 
                     <!-- Dynamic Preview Screen Simulator -->
                     <div class="assortment-preview">
-                        <div class="preview-screen-box">
+                        <div class="preview-screen-box" id="preview-screen-box">
                             <div class="preview-grid"></div>
                             <div class="preview-glow-core"></div>
                             <div class="preview-content-label">
                                 УСТАНОВКА
                                 <span>Внутренние и наружные экраны</span>
+                            </div>
+                            <div class="led-marquee-wrap" id="led-marquee-wrap" aria-hidden="true">
+                                <div class="led-marquee-track" id="led-marquee-track">LED SHOW • БИШКЕК •&nbsp;</div>
+                            </div>
+
+                            <!-- "Аренда экранов" preview: modular cabinets powering on one by one -->
+                            <div class="modular-grid" id="modular-grid" aria-hidden="true">
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-tile"></span>
+                                <span class="modular-caption">12 модулей &middot; сборка за 40 минут</span>
+                            </div>
+
+                            <!-- "Сценическое оборудование" preview: live DMX color mixer -->
+                            <div class="dmx-panel" id="dmx-panel" aria-hidden="true">
+                                <div class="dmx-beam" id="dmx-beam"></div>
+                                <div class="dmx-swatches" role="group" aria-label="Цвет DMX-подсветки">
+                                    <button type="button" class="dmx-swatch active" data-color="#8b5cf6" style="--c:#8b5cf6" aria-label="Фиолетовый"></button>
+                                    <button type="button" class="dmx-swatch" data-color="#ff3131" style="--c:#ff3131" aria-label="Красный"></button>
+                                    <button type="button" class="dmx-swatch" data-color="#23ea00" style="--c:#23ea00" aria-label="Зелёный"></button>
+                                    <button type="button" class="dmx-swatch" data-color="#00f0ff" style="--c:#00f0ff" aria-label="Голубой"></button>
+                                    <button type="button" class="dmx-swatch" data-color="#f59e0b" style="--c:#f59e0b" aria-label="Янтарный"></button>
+                                </div>
+                            </div>
+
+                            <!-- "Интерактивные панели" preview: an actually drawable touch panel -->
+                            <div class="draw-preview" id="draw-preview" aria-hidden="true">
+                                <canvas id="draw-canvas"></canvas>
+                                <span class="draw-hint" id="draw-hint">Двигайте курсором здесь — это сенсорная панель</span>
                             </div>
                         </div>
                     </div>
@@ -501,7 +584,11 @@
             </div>
         </section>
 
-        <div class="section-divider"></div>
+        <div class="section-divider" aria-hidden="true">
+            <span class="rgb-dot rgb-dot-cyan"></span>
+            <span class="rgb-dot rgb-dot-green"></span>
+            <span class="rgb-dot rgb-dot-red"></span>
+        </div>
         <!-- OUR WORKS (НАШИ РАБОТЫ - PHOTO PLACEHOLDERS) -->
         <section class="section-padding" id="works"
             style="background: linear-gradient(135deg, var(--bg-dark-950) 0%, var(--bg-dark-900) 50%, var(--bg-dark-800) 100%);">
@@ -516,7 +603,7 @@
                     <!-- Item 1 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <img src="images/tsum.webp" alt="Наружный угловой LED-экран ЦУМ" width="768" height="1024">
+                            <img src="images/tsum.webp" alt="Наружный угловой LED-экран ЦУМ" width="768" height="1024" loading="lazy" decoding="async">
                         </div>
                         <div class="work-info">
                             <span class="work-num">01</span>
@@ -536,7 +623,7 @@
                     <!-- Item 2 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <video autoplay loop muted playsinline poster="images/showroom.webp"
+                            <video id="works-video" loop muted playsinline preload="none" poster="images/showroom.webp"
                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                 <source src="images/sky%20plaza%20bishkek%20led%20show.mp4" type="video/mp4">
                                 Ваш браузер не поддерживает видео.
@@ -562,7 +649,7 @@
                     <!-- Item 3 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <img src="images/jashtyk.webp" alt="Светодиодные системы в СК Жаштык Арена" width="1024" height="663">
+                            <img src="images/jashtyk.webp" alt="Светодиодные системы в СК Жаштык Арена" width="1024" height="663" loading="lazy" decoding="async">
                         </div>
                         <div class="work-info">
                             <span class="work-num">03</span>
@@ -582,7 +669,7 @@
                     <!-- Item 4 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <img src="images/rental.webp" alt="Арендный светодиодный экран" width="1000" height="500">
+                            <img src="images/rental.webp" alt="Арендный светодиодный экран" width="1000" height="500" loading="lazy" decoding="async">
                         </div>
                         <div class="work-info">
                             <span class="work-num">04</span>
@@ -602,7 +689,7 @@
                     <!-- Item 5 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <img src="images/kymyz.webp" alt="Кымыз Фест в ущелье Чункурчак" width="1024" height="576">
+                            <img src="images/kymyz.webp" alt="Кымыз Фест в ущелье Чункурчак" width="1024" height="576" loading="lazy" decoding="async">
                         </div>
                         <div class="work-info">
                             <span class="work-num">05</span>
@@ -623,7 +710,7 @@
                     <!-- Item 6 -->
                     <div class="work-item">
                         <div class="work-img-wrap">
-                            <img src="images/airport.webp" alt="Интерьерный LED-арт экран" width="768" height="1024">
+                            <img src="images/airport.webp" alt="Интерьерный LED-арт экран" width="768" height="1024" loading="lazy" decoding="async">
                         </div>
                         <div class="work-info">
                             <span class="work-num">06</span>
@@ -643,7 +730,11 @@
             </div>
         </section>
 
-        <div class="section-divider"></div>
+        <div class="section-divider" aria-hidden="true">
+            <span class="rgb-dot rgb-dot-cyan"></span>
+            <span class="rgb-dot rgb-dot-green"></span>
+            <span class="rgb-dot rgb-dot-red"></span>
+        </div>
 
         <!-- CONTACTS & FEEDBACK SECTION -->
         <section class="section-padding" id="contacts" style="border-top: 1px solid rgba(255,255,255,0.03);">
@@ -651,6 +742,10 @@
                 <div class="section-title-wrap reveal">
                     <span class="section-tag">Свяжитесь с нами</span>
                     <h2 class="section-title text-gradient">Контакты и адрес</h2>
+                    <span class="hours-badge" id="hours-status" role="status">
+                        <span class="hours-dot"></span>
+                        Проверяем время работы&hellip;
+                    </span>
                 </div>
 
                 <div class="contacts-grid reveal">
@@ -687,6 +782,9 @@
                                 <h3>Контактные телефоны</h3>
                                 <a href="tel:+996552181122">+996 (552) 181122</a>
                                 <a href="tel:+996557538585">+996 (557) 538585</a>
+                                <span
+                                    style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-top: 4px;">Отвечаем
+                                    по телефону и в мессенджерах в любое время суток</span>
                             </div>
                         </div>
 
@@ -796,7 +894,7 @@
             <div class="footer-top">
                 <a href="#" class="logo-link">
                     <img src="images/logo.svg" alt="LED Show Логотип" class="logo-img" id="footer-logo"
-                        width="79" height="59" style="object-fit: contain;">
+                        width="79" height="59" loading="lazy" style="object-fit: contain;">
                 </a>
                 <div class="footer-nav">
                     <a href="#hero">Главная</a>
@@ -855,7 +953,7 @@
             <div
                 style="border-radius: var(--border-radius-sm); overflow: hidden; border: var(--border-glass); background: #ffffff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px;">
                 <img src="images/certificate.webp" alt="Сертификат ЕАЭС LED Show"
-                    width="724" height="1024" style="max-width: 100%; height: auto; max-height: 60vh; object-fit: contain; display: block;">
+                    width="724" height="1024" loading="lazy" decoding="async" style="max-width: 100%; height: auto; max-height: 60vh; object-fit: contain; display: block;">
             </div>
         </div>
     </div>

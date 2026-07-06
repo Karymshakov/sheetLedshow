@@ -53,15 +53,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. ASSORTMENT TAB SYSTEM ---
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabInfos = document.querySelectorAll('.assortment-info');
+    const previewBox = document.getElementById('preview-screen-box');
     const previewLabel = document.querySelector('.preview-content-label');
     const previewGlow = document.querySelector('.preview-glow-core');
     const previewGrid = document.querySelector('.preview-grid');
 
+    // Colors mirror the RGB sub-pixels in the LED Show logo (cyan/green/red),
+    // plus blue and violet as two further distinct channels.
     const tabStyles = {
         'sale': { text: 'УСТАНОВКА', sub: 'Медиафасады, LED экраны и панели', color: '#00f0ff', coarse: false },
-        'rent': { text: 'АРЕНДА', sub: 'Сцены, подиумы, звук и свет', color: '#3b82f6', coarse: true },
-        'lines': { text: 'БЕГУЩИЕ СТРОКИ', sub: 'Бегущие строки и табло', color: '#8b5cf6', coarse: false },
-        'light': { text: 'ОБОРУДОВАНИЕ', sub: 'Сцены, DMX свет, конференц-системы', color: '#10b981', coarse: true }
+        'rent': { text: 'АРЕНДА', sub: 'Сцены, подиумы, звук и свет', color: '#23ea00', coarse: true },
+        'lines': { text: 'БЕГУЩИЕ СТРОКИ', sub: 'Бегущие строки и табло', color: '#ff3131', coarse: false },
+        'light': { text: 'ОБОРУДОВАНИЕ', sub: 'Сцены, DMX свет, конференц-системы', color: '#3b82f6', coarse: true },
+        'panels': { text: 'СЕНСОРНАЯ ПАНЕЛЬ', sub: 'Интерактивное обучение и презентации', color: '#8b5cf6', coarse: false }
+    };
+
+    // Shared updater for the simulator preview box - used when switching tabs
+    function setPreview(text, sub, color, coarse) {
+        if (previewLabel) {
+            previewLabel.innerHTML = `${text}<span>${sub}</span>`;
+            previewLabel.style.color = color;
+        }
+        if (previewGlow) {
+            previewGlow.style.background = `radial-gradient(circle, ${color}55 0%, transparent 70%)`;
+        }
+        if (previewGrid) {
+            previewGrid.classList.toggle('coarse', !!coarse);
+        }
+    }
+
+    function showTabDefaultPreview(tabId) {
+        const style = tabStyles[tabId];
+        if (style) {
+            setPreview(style.text, style.sub, style.color, style.coarse);
+        }
+    }
+
+    // Each tab swaps the shared simulator box into its own interactive mode
+    const PREVIEW_MODE_CLASSES = ['marquee-mode', 'modular-mode', 'dmx-mode', 'draw-mode'];
+    const TAB_PREVIEW_MODE = {
+        rent: 'modular-mode',
+        lines: 'marquee-mode',
+        light: 'dmx-mode',
+        panels: 'draw-mode'
     };
 
     tabBtns.forEach(btn => {
@@ -80,27 +114,113 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Update interactive screen simulator preview
-            if (previewLabel && tabStyles[tabId]) {
-                const style = tabStyles[tabId];
-                previewLabel.innerHTML = `${style.text}<span>${style.sub}</span>`;
-
-                // Animate preview box transition
-                previewLabel.style.color = style.color;
-                if (previewGlow) {
-                    previewGlow.style.background = `radial-gradient(circle, ${style.color}55 0%, transparent 70%)`;
+            // Swap the shared simulator box into this tab's interactive mode
+            if (previewBox) {
+                previewBox.classList.remove(...PREVIEW_MODE_CLASSES);
+                const mode = TAB_PREVIEW_MODE[tabId];
+                if (mode) {
+                    previewBox.classList.add(mode);
                 }
+            }
 
-                if (previewGrid) {
-                    if (style.coarse) {
-                        previewGrid.classList.add('coarse');
-                    } else {
-                        previewGrid.classList.remove('coarse');
-                    }
-                }
+            if (tabId === 'panels') {
+                resetDrawCanvas();
+            }
+
+            showTabDefaultPreview(tabId);
+        });
+    });
+
+    // --- 4b. LIVE LED MARQUEE (RUNNING TEXT) DEMO ---
+    const marqueeInput = document.getElementById('marquee-input');
+    const marqueeTrack = document.getElementById('led-marquee-track');
+    const marqueeColorBtns = document.querySelectorAll('.marquee-color-btn');
+    const DEFAULT_MARQUEE_TEXT = 'LED SHOW • БИШКЕК • ';
+
+    if (marqueeInput && marqueeTrack) {
+        marqueeInput.addEventListener('input', () => {
+            const value = marqueeInput.value.trim();
+            marqueeTrack.textContent = value ? `${value}  •  ` : DEFAULT_MARQUEE_TEXT;
+        });
+    }
+
+    marqueeColorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            marqueeColorBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (marqueeTrack) {
+                marqueeTrack.style.setProperty('--marquee-color', btn.getAttribute('data-color'));
             }
         });
     });
+
+    // --- 4c. LIVE DMX COLOR MIXER DEMO ("Сценическое оборудование" tab) ---
+    const dmxBeam = document.getElementById('dmx-beam');
+    const dmxSwatchBtns = document.querySelectorAll('.dmx-swatch');
+
+    dmxSwatchBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            dmxSwatchBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (dmxBeam) {
+                dmxBeam.style.setProperty('--dmx-color', btn.getAttribute('data-color'));
+            }
+        });
+    });
+
+    // --- 4d. DRAWABLE TOUCH PANEL DEMO ("Интерактивные панели" tab) ---
+    const drawCanvas = document.getElementById('draw-canvas');
+    const drawCtx = drawCanvas ? drawCanvas.getContext('2d') : null;
+    const drawHint = document.getElementById('draw-hint');
+    let isDrawing = false;
+    let lastDrawX = 0;
+    let lastDrawY = 0;
+
+    function resetDrawCanvas() {
+        if (!drawCanvas || !drawCtx) return;
+        const rect = drawCanvas.getBoundingClientRect();
+        drawCanvas.width = rect.width;
+        drawCanvas.height = rect.height;
+        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        if (drawHint) {
+            drawHint.classList.remove('is-hidden');
+        }
+    }
+
+    function getDrawPos(e) {
+        const rect = drawCanvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    if (drawCanvas && drawCtx) {
+        drawCanvas.addEventListener('pointerdown', (e) => {
+            isDrawing = true;
+            if (drawHint) drawHint.classList.add('is-hidden');
+            const pos = getDrawPos(e);
+            lastDrawX = pos.x;
+            lastDrawY = pos.y;
+        });
+
+        drawCanvas.addEventListener('pointermove', (e) => {
+            if (!isDrawing) return;
+            const pos = getDrawPos(e);
+            drawCtx.strokeStyle = '#00f0ff';
+            drawCtx.lineWidth = 3;
+            drawCtx.lineCap = 'round';
+            drawCtx.shadowColor = '#00f0ff';
+            drawCtx.shadowBlur = 8;
+            drawCtx.beginPath();
+            drawCtx.moveTo(lastDrawX, lastDrawY);
+            drawCtx.lineTo(pos.x, pos.y);
+            drawCtx.stroke();
+            lastDrawX = pos.x;
+            lastDrawY = pos.y;
+        });
+
+        window.addEventListener('pointerup', () => {
+            isDrawing = false;
+        });
+    }
 
     // --- 5. INTERACTIVE LED CALCULATOR / SIMULATOR ---
     const calcWidthSlider = document.getElementById('calc-width');
@@ -341,6 +461,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         });
     });
+
+    // --- 8b. PLAY PORTFOLIO VIDEO ONLY WHEN VISIBLE ---
+    const worksVideo = document.getElementById('works-video');
+    if (worksVideo) {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    worksVideo.play().catch(() => {});
+                } else {
+                    worksVideo.pause();
+                }
+            });
+        }, { threshold: 0.25 });
+        videoObserver.observe(worksVideo);
+    }
+
+    // --- 7b. LIVE OPEN/CLOSED HOURS BADGE ---
+    // Mirrors the real openingHoursSpecification in the page's JSON-LD (Mon-Sat, 09:00-18:00, Asia/Bishkek).
+    const hoursBadge = document.getElementById('hours-status');
+    if (hoursBadge) {
+        const updateHoursStatus = () => {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Bishkek',
+                weekday: 'short',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false
+            }).formatToParts(new Date());
+
+            const map = {};
+            parts.forEach(part => { map[part.type] = part.value; });
+
+            const minutesNow = (parseInt(map.hour, 10) % 24) * 60 + parseInt(map.minute, 10);
+            const isSunday = map.weekday === 'Sun';
+            const isOpen = !isSunday && minutesNow >= 9 * 60 && minutesNow < 18 * 60;
+
+            hoursBadge.classList.toggle('is-open', isOpen);
+            hoursBadge.classList.toggle('is-closed', !isOpen);
+            hoursBadge.innerHTML = '<span class="hours-dot"></span>' +
+                (isOpen ? 'Открыто сейчас · до 18:00' : 'Закрыто · открываемся в 09:00');
+        };
+
+        updateHoursStatus();
+        setInterval(updateHoursStatus, 60000);
+    }
 
     // --- 8. LAZY LOAD MAP IFRAME ---
     const mapWrap = document.getElementById('map-wrap');
